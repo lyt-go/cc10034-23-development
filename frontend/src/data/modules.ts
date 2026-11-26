@@ -200,6 +200,28 @@ export const MODULES: ModuleMeta[] = [
     actionTargets: {"提交验证": "待验证", "启用规则": "已启用", "停用规则": "已停用"},
     metrics: ["检测规则总数", "待验证规则", "已启用规则"],
   },
+  {
+    key: "pseudonym_delivery",
+    name: "假名化交付",
+    entity: "假名化交付批次",
+    desc: "按数据主体的用途授权管理假名数据交付，撤回同意后停用受影响用途、继续处理仍获授权的交付。",
+    fields: ["交付编号", "数据主体", "用途清单", "假名标识", "交付批次", "交付状态", "交付时间", "资格依据", "下载次数", "最近下载时间"],
+    statuses: ["已交付", "已停用"],
+    actions: [],
+    actionTargets: {},
+    metrics: ["交付批次总数", "可下载批次", "已停用批次"],
+  },
+  {
+    key: "withdrawal_receipt",
+    name: "撤回影响回执",
+    entity: "撤回影响回执",
+    desc: "留存服务端核对撤回片段后生成的影响回执，记录停用交付与继续授权用途，作为合规审计依据。",
+    fields: ["回执编号", "数据主体", "撤回同意记录", "撤回处理目的", "撤回时间", "停用交付数", "停用交付明细", "继续授权用途", "历史依据保留"],
+    statuses: ["已生效"],
+    actions: [],
+    actionTargets: {},
+    metrics: ["回执总数", "已生效回执", "停用交付批次"],
+  },
 ]
 
 export const MODULE_BY_KEY: Map<string, ModuleMeta> = new Map(

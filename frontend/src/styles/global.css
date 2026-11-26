@@ -33,6 +33,22 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.info-text { color: #175cd3; background: #eff8ff; border: 1px solid #b2ddff; border-radius: 6px; padding: 8px 10px; font-size: 13px; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; white-space: nowrap; }
+.tag.ok { background: #dcfae6; color: #067647; }
+.tag.warn { background: #fef0c7; color: #b54708; }
+.tag.stop { background: #fee4e2; color: #b42318; }
+.tag.muted { background: #f2f4f7; color: var(--muted); }
+.confirm-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
+.confirm-card h3 { margin: 0 0 10px; font-size: 15px; }
+.scope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 0 0 10px; }
+.scope-grid dt { font-size: 12px; color: var(--muted); }
+.scope-grid dd { margin: 2px 0 0; font-size: 13px; }
+.scope-text { margin: 0; padding: 10px; background: #f8fafc; border-left: 3px solid var(--brand); border-radius: 4px; font-size: 13px; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: 10px; margin: 8px 0 20px; }
+.plain-list { margin: 0; padding-left: 18px; font-size: 13px; }
+.plain-list li { margin-bottom: 4px; }
+.basis-cell { max-width: 260px; font-size: 12px; color: var(--muted); }
 .modal-backdrop { position: fixed; inset: 0; background: rgb(15 23 42 / 35%); display: grid; place-items: center; padding: 20px; z-index: 20; }
 .modal { width: min(560px, 100%); max-height: 90vh; overflow: auto; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 20px 50px rgb(15 23 42 / 20%); }
 .create-field { display: block; margin-bottom: 10px; }

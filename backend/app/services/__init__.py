@@ -17,6 +17,8 @@ from app.services.differential_sql import DifferentialSqlService
 from app.services.encrypt_index import EncryptIndexService
 from app.services.watermark import WatermarkService
 from app.services.consent_registry import ConsentRegistryService
+from app.services.pseudonym_delivery import PseudonymDeliveryService
+from app.services.withdrawal_receipt import WithdrawalReceiptService
 from app.services.risk_scan import RiskScanService
 from app.services.deploy_policy import DeployPolicyService
 from app.services.anomaly_detect import AnomalyDetectService
@@ -37,6 +39,8 @@ SERVICES: dict[str, BaseModuleService] = {
     "encrypt_index": EncryptIndexService(),
     "watermark": WatermarkService(),
     "consent_registry": ConsentRegistryService(),
+    "pseudonym_delivery": PseudonymDeliveryService(),
+    "withdrawal_receipt": WithdrawalReceiptService(),
     "risk_scan": RiskScanService(),
     "deploy_policy": DeployPolicyService(),
     "anomaly_detect": AnomalyDetectService(),

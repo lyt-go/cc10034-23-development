@@ -8,6 +8,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
+from app.errors import FlowError
 from app.schemas import ActionPayload, ActionResult, EntryPayload, PageResult
 from app.services import service_for
 
@@ -85,14 +86,23 @@ def get_entry(module: str, entry_id: int) -> dict[str, Any]:
 @router.post("/{module}", response_model=ActionResult)
 def create_entry(module: str, payload: EntryPayload) -> ActionResult:
     service = require_service(module)
-    entry, missing = service.create_entry(payload.values)
-    if missing:
-        return ActionResult(ok=False, message=f"缺少必填字段：{'、'.join(missing)}")
+    try:
+        entry, missing = service.create_entry(payload.values)
+    except FlowError as exc:
+        return ActionResult(ok=False, message=str(exc))
+    if entry is None:
+        # missing 非空是通用必填校验；为空说明领域服务自行拒绝并给出了原因
+        if missing:
+            return ActionResult(ok=False, message=f"缺少必填字段：{'、'.join(missing)}")
+        return ActionResult(ok=False, message="登记未通过领域校验")
     return ActionResult(ok=True, message=f"{service.ENTITY}已登记", entry=entry)
 
 
 @router.post("/{module}/{entry_id}/actions", response_model=ActionResult)
 def run_action(module: str, entry_id: int, payload: ActionPayload) -> ActionResult:
     service = require_service(module)
-    entry, message = service.run_action(entry_id, payload.action.strip())
+    try:
+        entry, message = service.run_action(entry_id, payload.action.strip())
+    except FlowError as exc:
+        return ActionResult(ok=False, message=str(exc))
     return ActionResult(ok=entry is not None, message=message, entry=entry)

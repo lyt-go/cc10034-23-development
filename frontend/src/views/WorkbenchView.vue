@@ -6,9 +6,18 @@
         <p class="page-desc">{{ meta.desc }}</p>
       </div>
       <div class="page-actions">
-        <button class="btn primary" data-testid="open-create" type="button" @click="openCreate">
+        <button
+          v-if="!dedicatedPage"
+          class="btn primary"
+          data-testid="open-create"
+          type="button"
+          @click="openCreate"
+        >
           登记{{ meta.entity }}
         </button>
+        <RouterLink v-else class="btn primary" :to="dedicatedPage" data-testid="open-dedicated">
+          进入{{ meta.name }}工作台
+        </RouterLink>
         <button class="btn" data-testid="export" type="button" @click="exportRows">
           导出{{ meta.name }}清单
         </button>
@@ -95,6 +104,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import {
   createEntry,
@@ -106,7 +116,14 @@ import {
 import type { EntryRow } from '@/data/types'
 
 const props = defineProps<{ moduleKey: string }>()
+const router = useRouter()
 const meta = moduleMeta(props.moduleKey)
+// 这两个模块有独立工作台/只读回执页，不走通用登记弹窗
+const dedicatedPage = computed(() => {
+  if (props.moduleKey === 'pseudonym_delivery') return '/pseudonym-delivery'
+  if (props.moduleKey === 'withdrawal_receipt') return '/withdrawal-receipts'
+  return ''
+})
 const rows = ref<EntryRow[]>([])
 const total = ref(0)
 const errorMessage = ref('')
@@ -167,6 +184,11 @@ async function submitCreate() {
 
 async function runAction(action: string, row: EntryRow) {
   errorMessage.value = ''
+  // 撤回同意必须经过服务端影响核对与确认页，不允许在列表里直接撤回
+  if (props.moduleKey === 'consent_registry' && action === '撤回同意') {
+    await router.push(`/consent_registry/withdrawal/${Number(row.id)}`)
+    return
+  }
   try {
     const result = await applyAction(meta.key, Number(row.id), action)
     if (!result.ok) throw new Error(result.message)
